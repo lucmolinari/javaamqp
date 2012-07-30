@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- Arquivo com as configuracoes principais do Rabbit MQ -->
+
+	<!-- define o connection factory -->
+	<rabbit:connection-factory id="connectionFactory"
+		host="localhost" username="guest" password="guest" port="5672"
+		channel-cache-size="10" />
+		
+	<!-- define o exchange a ser criado, caso ainda nao exista -->
+	<rabbit:direct-exchange name="exchange.tdc">
+		<!-- faz o binding do exchange com uma fila -->
+		<rabbit:bindings>
+			<rabbit:binding queue="test.queue" key="test.queue" />
+		</rabbit:bindings>
+	</rabbit:direct-exchange>
+	
+	<!-- cria a fila, caso ainda nao exista -->
+	<rabbit:queue name="test.queue" />
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+</beans>
